@@ -15,8 +15,11 @@ It uses the **Biopython** library to read and compare DNA sequences from **FASTA
 2. **Loads** multiple dog breed DNA sequences from another FASTA file.
 3. **Compares** the mystery sequence to each breed using **global sequence alignment**.
 4. **Finds** the best-matching breed based on the alignment score.
-5. **Outputs** the closest match and highlights the sequence differences.
+5. **Calculates** the  p-value to assess whether the similarity of the best matcing breed is statistically significant relative to other scores.
+
+5. **Outputs** the closest match, highlights the sequence differences, the p-value and simlarity score 
 
 ## Requirements
-Ensure you have the following library: 
+Ensure you have the following libraries: 
 pip install biopython 
+pip install scipy
