@@ -1,10 +1,17 @@
-#variables to hold my file pathways
-#using 'Biopython' library and importing the 'SeqIO' module to read the files
+
 # PairwiseAlinger is imported to align and compare the sequences and scipy imported to provide statistical functions
 from Bio import SeqIO
 from Bio.Align import PairwiseAligner
 from scipy import stats
-
+"""
+    Reads the mystery sequence from the provided FASTA file.
+    
+    Parameters:
+    mystery_fa (str): File path to the mystery sequence in FASTA format.
+    
+    Returns:
+    SeqRecord: The sequence record of the mystery sequence.
+    """
 dog_breeds_fa= r"C:\Users\jadec\OneDrive\biocomputing\Coursework Project\project_dog_dna\dog_breeds.fa"
 mystery_fa= r"C:\Users\jadec\OneDrive\biocomputing\Coursework Project\project_dog_dna\mystery.fa"
 
@@ -13,8 +20,16 @@ def read_mystery_seq(mystery_fa):
     return mystery_sequence
 
 
-# processes a FASTA file containing information about dog breeds in its headers and builds a dictionary 
-# where the keys are the descriptions  and the values are the corresponding DNA in sequences.
+"""
+    Reads the dog breeds from the provided FASTA file and builds a dictionary
+    where the keys are the descriptions (headers) and the values are the sequences.
+    
+    Parameters:
+    dog_breeds_fa (str): File path to the dog breeds sequences in FASTA format.
+    
+    Returns:
+    dict: A dictionary with descriptions as keys and sequences as values.
+    """
 def read_dog_breeds(dog_breeds_fa):
     dog_breeds = {}
     for record in SeqIO.parse(dog_breeds_fa, "fasta"):
@@ -22,12 +37,29 @@ def read_dog_breeds(dog_breeds_fa):
         dog_breeds[description] = str(record.seq)
     return dog_breeds
 
-# takes the mystery sequence and dog breed dictionary generated earlier
+"""
+    Finds the most similar dog breed to the mystery sequence by performing a
+    global sequence alignment and calculating the alignment score. Additionally,
+    it compares the sequences, prints the differences, and calculates a p-value
+    to assess the statistical significance of the similarity.
+    
+    Parameters:
+    mystery_sequence (SeqRecord): The mystery DNA sequence.
+    dog_breeds (dict): A dictionary containing dog breed names (as keys) and DNA sequences (as values).
+    
+    Returns:
+    tuple: A tuple containing:
+        - The description of the most similar dog breed (str)
+        - The sequence of the most similar dog breed (str)
+        - The p-value from the statistical test (float)
+    """
+
 # itialises 'PairwaiseAligner' with specific scoring parameters
 # compares the mysetery sequence agaiast each breed's sequence using global alignment amd calculates alignment score
 # tracks highest alignment score and corresponding sequence
 # if alignment is found the most similar breed, it compares the sequences and prints the differences of the two.
-# returns description of the most similar breed and sequence. 
+# Performs a one-sample t-test (ttest_1samp) on the alignment scores with the top score as the sample.
+# Computes a p-value to assess whether the similarity of the top match is statistically significant relative to other scores.
 
 def find_most_similar_breed(mystery_sequence, dog_breeds):
     aligner = PairwiseAligner()
@@ -74,6 +106,6 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
     print(f"Similarity Score: {top_score}")
     print(f"P-value: {p_value}")
 
-    return most_similar_description, most_similar_sequence
+    return most_similar_description, most_similar_sequence, p_value
     
 find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)) 
