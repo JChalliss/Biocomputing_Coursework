@@ -1,8 +1,9 @@
 #variables to hold my file pathways
 #using 'Biopython' library and importing the 'SeqIO' module to read the files
-# and importing 'PairwiseAlinger to align and compare the sequences.  
+# PairwiseAlinger is imported to align and compare the sequences and scipy imported to provide statistical functions
 from Bio import SeqIO
 from Bio.Align import PairwiseAligner
+from scipy import stats
 
 dog_breeds_fa= r"C:\Users\jadec\OneDrive\biocomputing\Coursework Project\project_dog_dna\dog_breeds.fa"
 mystery_fa= r"C:\Users\jadec\OneDrive\biocomputing\Coursework Project\project_dog_dna\mystery.fa"
@@ -40,10 +41,12 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
     most_similar_description = None
     most_similar_sequence = None
     highest_alignment = None
+    similarity_scores = []
     
     for description, breed_sequence in dog_breeds.items():
         alignments = aligner.align(mystery_sequence, breed_sequence)
         score = alignments[0].score  
+        similarity_scores.append(score)
         
         if score > top_score:
             top_score = score
@@ -63,8 +66,14 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
                 print(f"Position {i+1}: {char1} -> gap in breed sequence")
              else:
                 print(f"Position {i+1}: {char1} -> {char2}")
-                print(f"Position {i+1}: {char1} -> {char2}")    
+                print(f"Position {i+1}: {char1} -> {char2}")  
+
+    p_value = stats.ttest_1samp(similarity_scores, top_score).pvalue
+    
+    print(f"\nThe closest sequence is: {most_similar_description}")
+    print(f"Similarity Score: {top_score}")
+    print(f"P-value: {p_value}")
+
     return most_similar_description, most_similar_sequence
     
-print(f" The closest sequence is:",find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)))
- 
+find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)) 
