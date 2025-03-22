@@ -21,5 +21,5 @@ It uses the **Biopython** library to read and compare DNA sequences from **FASTA
 
 ## Requirements
 Ensure you have the following libraries: 
-pip install biopython 
-pip install scipy
+'pip install biopython' 
+'pip install scipy'
