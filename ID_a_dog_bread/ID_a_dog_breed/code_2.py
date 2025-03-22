@@ -21,6 +21,12 @@ def read_dog_breeds(dog_breeds_fa):
         dog_breeds[description] = str(record.seq)
     return dog_breeds
 
+# takes the mystery sequence and dog breed dictionary generated earlier
+# itialises 'PairwaiseAligner' with specific scoring parameters
+# compares the mysetery sequence agaiast each breed's sequence using global alignment amd calculates alignment score
+# tracks highest alignment score and corresponding sequence
+# if alignment is found the most similar breed, it compares the sequences and prints the differences of the two.
+# returns description of the most similar breed and sequence. 
 
 def find_most_similar_breed(mystery_sequence, dog_breeds):
     aligner = PairwiseAligner()
@@ -48,7 +54,7 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
          aligned_seq1 = highest_alignment[0]  
          aligned_seq2 = highest_alignment[1]
     
-    print("\nDifferences:")
+    print("\nDifferences between 'mystery sequence' and most similar sequence match found:")
     for i, (char1, char2) in enumerate(zip(aligned_seq1, aligned_seq2)):
         if char1 != char2:
              if char1 == "-":
@@ -57,9 +63,8 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
                 print(f"Position {i+1}: {char1} -> gap in breed sequence")
              else:
                 print(f"Position {i+1}: {char1} -> {char2}")
-                print(f"Position {i+1}: {char1} -> {char2}")
-
-        
+                print(f"Position {i+1}: {char1} -> {char2}")    
     return most_similar_description, most_similar_sequence
-
-print(find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)))
+    
+print(f" The closest sequence is:",find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)))
+ 
