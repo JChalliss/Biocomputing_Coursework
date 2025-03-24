@@ -1,8 +1,13 @@
-
-# PairwiseAlinger is imported to align and compare the sequences and scipy imported to provide statistical functions
 from Bio import SeqIO
 from Bio.Align import PairwiseAligner
 from scipy import stats
+from Bio.Phylo import TreeConstruction
+from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+from Bio.Align import MultipleSeqAlignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import Phylo
+import matplotlib.pyplot as plt
 """
     Reads the mystery sequence from the provided FASTA file.
     
@@ -102,10 +107,129 @@ def find_most_similar_breed(mystery_sequence, dog_breeds):
 
     p_value = stats.ttest_1samp(similarity_scores, top_score).pvalue
     
-    print(f"\nThe closest sequence is: {most_similar_description}")
+    print(f"\nThe closest sequence is: {most_similar_description,most_similar_sequence}")
     print(f"Similarity Score: {top_score}")
     print(f"P-value: {p_value}")
 
     return most_similar_description, most_similar_sequence, p_value
+
+"""
+Aligns the dog breed sequences using global pairwise alignment and returns the
+multiple sequence alignment.
+
+Parameters:
+dog_breeds (dict): A dictionary containing dog breed names (as keys) and DNA sequences (as values).
+
+Returns:
+MultipleSeqAlignment: An alignment of the dog breed sequences.
+"""
+# Align each breed sequence with itself (this could be replaced with a multiple sequence alignment)
+# Wrap the aligned sequence in a SeqRecord object
+def align_sequences(dog_breeds):
+    aligner = PairwiseAligner()
+    aligner.mode = "global"
+    aligner.match_score = 1
+    aligner.mismatch_score = 0
+    aligner.open_gap_score = -1
+    aligner.extend_gap_score = -1
     
-find_most_similar_breed(read_mystery_seq(mystery_fa), read_dog_breeds(dog_breeds_fa)) 
+    sequences = []
+    
+    for description, breed_sequence in dog_breeds.items():
+        
+        aligned_sequence = aligner.align(breed_sequence, breed_sequence)
+       
+        seq_record = SeqRecord(Seq(str(aligned_sequence[0])), id=description)
+        sequences.append(seq_record)
+    
+    alignment = MultipleSeqAlignment(sequences)
+    return alignment
+"""
+Computes the distance matrix for the given multiple sequence alignment using
+the identity model to calculate pairwise distances between sequences.
+
+Parameters:
+alignment (MultipleSeqAlignment): The multiple sequence alignment to compute distances for.
+
+Returns:
+DistanceMatrix: A matrix representing the pairwise distances between sequences.
+"""
+# Compute the distance matrix using a pairwise distance calculation
+# Using the identity distance model
+def compute_distance_matrix(alignment):
+    calculator = DistanceCalculator('identity')  
+    distance_matrix = calculator.get_distance(alignment)
+    return distance_matrix
+"""
+Constructs a phylogenetic tree using the Neighbor Joining method from a distance matrix.
+
+Parameters:
+distance_matrix (DistanceMatrix): The matrix of pairwise distances between sequences.
+
+Returns:
+Phylo.BaseTree.Tree: The constructed phylogenetic tree.
+"""
+# Construct the phylogenetic tree from the distance matrix
+# Using Neighbor Joining algorithm
+def construct_phylogenetic_tree(distance_matrix):
+    constructor = DistanceTreeConstructor()
+    tree = constructor.nj(distance_matrix)  
+    Phylo.write(tree, "phylogenetic_tree.nwk", "newick")
+    return tree
+"""
+Visualizes the phylogenetic tree using Matplotlib and Bio.Phylo, adjusting the size
+and collapsing branches with small lengths for better readability.
+
+Parameters:
+tree (Phylo.BaseTree.Tree): The phylogenetic tree to visualize.
+
+Returns:
+None
+"""
+# Visualize the phylogenetic tree
+# Increase figure size
+# Only collapse clades if they have valid branch lengths
+# Ignore collapse errors if they occur
+def visualize_tree(tree):
+    fig = plt.figure(figsize=(20, 10))  
+    ax = fig.add_subplot(1, 1, 1)
+    for clade in tree.find_clades():  
+        if clade.branch_length is not None and clade.branch_length < 0.0001:
+            try:
+                clade.collapse()
+            except ValueError:
+                pass 
+
+    Phylo.draw(tree, axes=ax)
+    return plt.show()
+
+
+"""
+Main function that orchestrates the process:
+- Reads in the dog breed and mystery sequences.
+- Finds the most similar breed to the mystery sequence.
+- Aligns the dog breed sequences and generates the distance matrix.
+- Constructs and visualizes the phylogenetic tree.
+
+Returns:
+None
+"""
+def main():
+    
+    dog_breeds = read_dog_breeds(dog_breeds_fa)
+    mystery_sequence = read_mystery_seq(mystery_fa)
+
+    find_most_similar_breed(mystery_sequence, dog_breeds)
+
+    alignment = align_sequences(dog_breeds)
+    distance_matrix = compute_distance_matrix(alignment)
+
+    phylogenetic_tree = construct_phylogenetic_tree(distance_matrix)
+
+
+    visualize_tree(phylogenetic_tree)
+
+
+if __name__ == "__main__":
+    main()
+ 
