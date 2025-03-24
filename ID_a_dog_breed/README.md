@@ -16,10 +16,14 @@ It uses the **Biopython** library to read and compare DNA sequences from **FASTA
 3. **Compares** the mystery sequence to each breed using **global sequence alignment**.
 4. **Finds** the best-matching breed based on the alignment score.
 5. **Calculates** the  p-value to assess whether the similarity of the best matcing breed is statistically significant relative to other scores.
+6. **Aligns** the dog breed sequences
+7. **Computes** the distance matrix, using **the identity model** to calculate the distances.
+8. **Constructs** a phylogenetic tree using the **Neighbor Joining method**
 
-5. **Outputs** the closest match, highlights the sequence differences, the p-value and simlarity score 
+9. **Outputs** the closest match, highlights the sequence differences, the p-value and simlarity score and a phylogenetic tree
 
 ## Requirements
 Ensure you have the following libraries: 
 pip install biopython 
 pip install scipy
+pip intsall matplotlib
