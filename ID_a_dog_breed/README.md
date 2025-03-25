@@ -28,3 +28,23 @@ Ensure you have the following libraries:
 pip install biopython 
 pip install scipy
 pip intsall matplotlib
+
+## Function descriptions 
+**read_mystery_seq(mystery_fa)** Reads the mystery sequence from a FASTA file and returns it as a SeqRecord object.
+**read_dog_breeds(dog_breeds_fa)**Reads the dog breed sequences from a FASTA file and returns them as a dictionary.
+**find_most_similar_breed(mystery_sequence, dog_breeds)**Finds the most similar breed using pairwise sequence alignment and statistical analysis.
+**align_sequences(dog_breeds)**Performs global alignment on the dog breed sequences and returns a MultipleSeqAlignment object.
+**compute_distance_matrix(alignment)**Computes the pairwise distance matrix using an identity-based model.
+**construct_phylogenetic_tree(distance_matrix)**Builds a phylogenetic tree using the Neighbor-Joining method and saves it in Newick format.
+**visualize_tree(tree)**Generates a visualization of the phylogenetic tree using Matplotlib.
+**main()**Executes the entire workflow from reading data to visualizing results.
+
+## Expected Output
+
+1. Identifies the most similar dog breed to the mystery sequence and prints:
+2. The closest matching breed.
+3. The alignment score.
+4. A statistical p-value to assess significance.
+5. Differences between the sequences.
+6. Constructs and saves a phylogenetic tree.
+7. Displays a visual representation of the phylogenetic tree.
