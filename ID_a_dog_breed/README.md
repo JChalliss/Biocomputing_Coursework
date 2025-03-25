@@ -8,7 +8,7 @@ It uses the **Biopython** library to read and compare DNA sequences from **FASTA
 ## FIles in this Project
 - `dog_breeds.fa` - Contains DNA sequences of different dog breeds.
 - `mystery.fa` - Contains an unknown DNA sequence to compare.
-- `Test_Project_ID_Breed.py` - The main Python script.
+- `Project_ID_Breed.py` - The main Python script.
 - `README.md` - This file, explaining the project.
 
 ##  How it Works
