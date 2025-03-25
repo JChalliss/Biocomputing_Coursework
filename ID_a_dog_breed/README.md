@@ -2,12 +2,13 @@
 
 ## Project Overview
 This project identifies the closest matching dog breed for a given **mystery DNA sequence** by performing **global sequence alignment**.  
-It uses the **Biopython** library to read and compare DNA sequences from **FASTA files**.
+It uses the **Biopython** library to read and compare DNA sequences from **FASTA files**. The p-value is calculated to show the similarity of the closest matching dog breed is statistically significant. It goes on to construct a phylogenetic tree using the **Neighbor Joining method**
+
 
 ## FIles in this Project
 - `dog_breeds.fa` - Contains DNA sequences of different dog breeds.
 - `mystery.fa` - Contains an unknown DNA sequence to compare.
-- `alignment_script.py` - The main Python script for sequence alignment.
+- `Test_Project_ID_Breed.py` - The main Python script.
 - `README.md` - This file, explaining the project.
 
 ##  How it Works
@@ -15,12 +16,12 @@ It uses the **Biopython** library to read and compare DNA sequences from **FASTA
 2. **Loads** multiple dog breed DNA sequences from another FASTA file.
 3. **Compares** the mystery sequence to each breed using **global sequence alignment**.
 4. **Finds** the best-matching breed based on the alignment score.
-5. **Calculates** the  p-value to assess whether the similarity of the best matcing breed is statistically significant relative to other scores.
+5. **Calculates** the p-value to assess whether the similarity of the best matcing breed is statistically significant relative to other scores.
 6. **Aligns** the dog breed sequences
 7. **Computes** the distance matrix, using **the identity model** to calculate the distances.
 8. **Constructs** a phylogenetic tree using the **Neighbor Joining method**
 
-9. **Outputs** the closest match, highlights the sequence differences, the p-value and simlarity score and a phylogenetic tree
+9. **Outputs**  highlights the sequence differences, the closest match sequence and description, the p-value and simlarity score and a phylogenetic tree
 
 ## Requirements
 Ensure you have the following libraries: 
